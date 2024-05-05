@@ -1,0 +1,31 @@
+name: nodejs deploy config
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: create an env file
+        run: echo "MONGODB_URL=${{secrets.mongodb_url}}" > .env
+      - name: Login to dockerhub
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+      - name: build a docker image
+        run: docker build -t devbharath/nodejs-app .
+      - name: publish a docker image
+        run: docker push devbharath/nodejs-app:latest
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: pull image from docker-hub
+        run: docker pull devbharath/nodejs-app:latest
+      - name: delete old docker image
+        run: docker rmi -f devbharath/nodejs-app:latest
+      - name: Run docker container
+        run: docker run -d -p 4000:4000 --name devbharath-nodejs-app-container devbharath/nodejs-app:latest
