@@ -12,7 +12,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
       - name: create an env file
-        run: echo "MONGODB_URL=${{secrets.mongodb_url}}" > .env
+        run: echo "MONGODB_URL=${{secrets.MONGODB_URL}}" > .env
       - name: Login to dockerhub
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
       - name: build a docker image
