@@ -2,13 +2,10 @@ FROM node
 
 WORKDIR /app
 
-COPY . .
-
-COPY package.json */
+COPY package.json ./
 
 RUN npm install
 
-EXPOSE 4000
+COPY . .
 
 CMD [ "npm","start","nodemon" ]
-
