@@ -3,7 +3,7 @@ name: Deploy node application
 on:
   push:
     branches:
-      - main
+      - bharath
 
 jobs:
   build:
