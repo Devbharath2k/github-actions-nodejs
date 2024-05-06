@@ -19,6 +19,7 @@ jobs:
         run: docker build -t devbharath/nodejs-app .
       - name: publish a docker image
         run: docker push devbharath/nodejs-app:latest
+        
   deploy:
     needs: build
     runs-on: self-hosted
