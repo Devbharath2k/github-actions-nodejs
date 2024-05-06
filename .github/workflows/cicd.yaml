@@ -19,6 +19,7 @@ jobs:
         run: docker build -t devbharath21k/nodejs .
       - name: Publish a Docker image
         run: docker push devbharath21k/nodejs:latest
+
         
   deploy:
     needs: build
