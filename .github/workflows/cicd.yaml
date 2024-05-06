@@ -18,15 +18,15 @@ jobs:
       - name: Build Docker image
         run: docker build -t devbharath21k/nodejs .
       - name: Push Docker image to Docker Hub
-        run: docker push devbharath21k/nodejs:latest
+        run: docker push devbharath21k/nodejs:tagname
 
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
       - name: Pull image from Docker Hub
-        run: docker pull devbharath21k/nodejs:latest
+        run: docker pull devbharath21k/nodejs:tagname
       - name: remove running container
         run: docker stop node-app-container || true && docker rm node-app-container || true
       - name: Run Docker container
-        run: docker run -d -p 4000:4000 --name devbharath-nodejs-app-container devbharath/nodejs-app:latest
+        run: docker run -d -p 4000:4000 --name devbharath-nodejs-app-container devbharath21k/nodejs:tagname
