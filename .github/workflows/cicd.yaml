@@ -1,4 +1,4 @@
-name: Deploy node application
+name: Deploy Node.js Application
 
 on:
   push:
@@ -7,26 +7,32 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
-      - name: create an env file
-        run: echo "MONGODB_URL=${{secrets.MONGODB_URL}}" > .env
+        uses: actions/checkout@v2
+      
+      - name: Create env file
+        run: echo "MONGODB_URL=${{ secrets.MONGODB_URL }}" > .env
+
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      
       - name: Build Docker image
-        run: docker build -t devbharath21k/nodejs:tagname .
+        run: docker build -t devbharath21k/nodejs:latest .
+      
       - name: Push Docker image to Docker Hub
-        run: docker push devbharath21k/nodejs:tagname
+        run: docker push devbharath21k/nodejs:latest
 
   deploy:
     needs: build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Pull image from Docker Hub
-        run: docker pull devbharath21k/nodejs:tagname
-      - name: remove running container
-        run: docker stop node-app-container || true && docker rm node-app-container || true
+        run: docker pull devbharath21k/nodejs:latest
+      
+      - name: Stop and remove existing container
+        run: docker stop devbharath-nodejs-app-container || true && docker rm devbharath-nodejs-app-container || true
+      
       - name: Run Docker container
-        run: docker run -d -p 4000:4000 --name devbharath-nodejs-app-container devbharath21k/nodejs:tagname
+        run: docker run -d -p 4000:4000 --name devbharath-nodejs-app-container devbharath21k/nodejs:latest
