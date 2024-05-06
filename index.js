@@ -12,6 +12,9 @@ app.use(cors());
 app.use(routes);
 
 
+app.get('/', function (req, res) {
+  res.send('welcome to automation')
+})
 
 mongoose.connect(process.env.MONGODB_URL).then(() => {
   app.listen(PORT, () => {
