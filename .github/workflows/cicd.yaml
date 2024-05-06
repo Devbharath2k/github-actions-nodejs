@@ -19,20 +19,20 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       
       - name: Build Docker image
-        run: docker build -t devbharath21k/nodejs:latest .
+        run: docker build -t rajeswaripoongodi/dev:dev .
       
       - name: Push Docker image to Docker Hub
-        run: docker push devbharath21k/nodejs:latest
+        run: docker push rajeswaripoongodi/:dev
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Pull image from Docker Hub
-        run: docker pull devbharath21k/nodejs:latest
+        run: docker pull rajeswaripoongodi/dev:dev
       
       - name: Stop and remove existing container
         run: docker stop devbharath-nodejs-app-container || true && docker rm devbharath-nodejs-app-container || true
       
       - name: Run Docker container
-        run: docker run -d -p 4000:4000 --name devbharath-nodejs-app-container devbharath21k/nodejs:latest
+        run: docker run -d -p 4000:4000 --name devbharath-nodejs-app-container rajeswaripoongodi/dev:dev
