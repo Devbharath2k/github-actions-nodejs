@@ -11,13 +11,14 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+      - name: create an env file
+        run: echo "MONGODB_URL=${{secrets.MONGODB_URL}}" > .env
       - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Docker image
         run: docker build -t devbharath21k/nodejs .
       - name: Push Docker image to Docker Hub
         run: docker push devbharath21k/nodejs:latest
-
 
   deploy:
     needs: build
@@ -26,6 +27,6 @@ jobs:
       - name: Pull image from Docker Hub
         run: docker pull devbharath21k/nodejs:latest
       - name: remove running container
-        run: docker stop node-app-container || true && docker rm node-app-container || true 
+        run: docker stop node-app-container || true && docker rm node-app-container || true
       - name: Run Docker container
-        run: docker run --name node-app-container -p 4000:4000 -e PORT=${{ secrets.PORT }} -d devbharath21k/nodejs:latest
+        run: docker run -d -p 4000:4000 --name devbharath-nodejs-app-container devbharath/nodejs-app:latest
