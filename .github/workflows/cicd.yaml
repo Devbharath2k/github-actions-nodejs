@@ -27,6 +27,6 @@ jobs:
       - name: Pull image from Docker Hub
         run: docker pull rajeswaripoongodi/dev
       - name: remove running container
-        run: docker stop node-app-container || true && docker rm node-app-container || true 
+        run: docker stop devbharath-nodejs-app-container || true && docker rm devbharath-nodejs-app-container || true 
       - name: Run Docker container
         run: docker run -d -p 4000:4000 --name devbharath-nodejs-app-container rajeswaripoongodi/dev
